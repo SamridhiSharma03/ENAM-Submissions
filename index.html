@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>FINN</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>
+:root{--bg:#f6f5f1;--card:#fff;--ink:#1a1d21;--mut:#6b7078;--line:#e4e2db;--acc:#0f5c4d;--up:#0a7a3d;--dn:#b3261e;--warn:#9a6b00;--chip:#eef0ec;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#101214;--card:#1a1d21;--ink:#ecebe6;--mut:#9aa0a8;--line:#2b2f35;--acc:#5fc4ad;--up:#4cc27a;--dn:#ff8a80;--warn:#e0b04a;--chip:#252a30}}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.4 system-ui,-apple-system,"Segoe UI",sans-serif;padding-bottom:76px}
+.wrap{max-width:560px;margin:0 auto;padding:0 14px}
+header{position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);z-index:5;padding:12px 0 8px;border-bottom:1px solid var(--line)}
+h1{font-size:20px;margin:0;letter-spacing:.5px}.sub{color:var(--mut);font-size:13px;margin-top:2px}
+.row{display:flex;gap:8px;align-items:center;justify-content:space-between}
+.pills{display:flex;gap:6px;margin-top:8px;overflow-x:auto}
+.pill{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:20px;padding:6px 12px;font-size:13px;white-space:nowrap}
+.pill.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;margin:10px 0}
+.top{display:flex;justify-content:space-between;gap:8px;font-size:12px;color:var(--mut)}
+.tk{font-weight:700;color:var(--ink);font-size:13px}
+.chip{background:var(--chip);border-radius:6px;padding:2px 7px;font-size:11px;color:var(--mut);margin-left:6px}
+.p1{border-left:4px solid var(--acc)}
+.ttl{font-weight:600;margin:6px 0 4px}
+.why{font-size:13px;color:var(--mut)}.why b{color:var(--ink)}
+table{width:100%;border-collapse:collapse;margin:8px 0;font-size:13px}
+th{font-weight:500;color:var(--mut);text-align:right;padding:3px 0}th:first-child,td:first-child{text-align:left}
+td{padding:5px 0;border-top:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums}
+.up{color:var(--up)}.dn{color:var(--dn)}
+.note{font-size:12px;color:var(--warn);background:var(--chip);border-radius:8px;padding:6px 8px;margin-top:6px}
+.btns{display:flex;gap:8px;margin-top:8px}
+button{font:inherit;cursor:pointer}
+.btn{flex:1;min-height:44px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
+.btn.main{background:var(--acc);color:#fff;border-color:var(--acc)}
+.coll{color:var(--mut);font-size:13px;text-align:center;padding:10px}
+nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--line);display:flex;padding-bottom:env(safe-area-inset-bottom,0px);z-index:6}
+nav button{flex:1;min-height:56px;background:none;border:0;color:var(--mut);font-size:12px}
+nav button.on{color:var(--acc);font-weight:700}
+.sheet{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9;display:none;align-items:flex-end}
+.sheet.show{display:flex}.sh{background:var(--bg);width:100%;max-width:560px;margin:0 auto;border-radius:18px 18px 0 0;padding:16px 14px calc(16px + env(safe-area-inset-bottom,0px));max-height:86vh;overflow:auto}
+.verd{font-size:11px;font-weight:700;border-radius:6px;padding:2px 7px}
+.v-ok{background:rgba(10,122,61,.14);color:var(--up)}.v-no{background:rgba(179,38,30,.14);color:var(--dn)}.v-inf{background:var(--chip);color:var(--mut)}
+.src{font-size:11px;color:var(--mut);margin-top:4px}
+input[type=text]{width:100%;min-height:44px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:0 12px;font:inherit}
+.q{display:inline-block;margin:4px 6px 0 0}
+.msg{margin:8px 0;padding:10px;border-radius:12px;background:var(--card);border:1px solid var(--line);font-size:14px}.msg.me{background:var(--acc);color:#fff;border:0;margin-left:36px}
+.meter{height:8px;background:var(--chip);border-radius:6px;overflow:hidden;margin:6px 0}.meter i{display:block;height:100%;background:var(--acc)}
+label.t{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-top:1px solid var(--line)}
+.hide{display:none}
+</style></head><body>
+<div class="wrap">
+<header><div class="row"><div><h1>FINN</h1><div class="sub" id="asof"></div></div>
+<button class="pill" id="bell" aria-label="Alert settings">Alerts ⚙</button></div>
+<div class="pills" id="win"></div></header>
+<main id="main"></main></div>
+<nav><button data-t="brief" class="on">Briefing</button><button data-t="trust">Trust</button><button data-t="ask">Ask</button></nav>
+<div class="sheet" id="sheet"><div class="sh" id="sh"></div></div>
+<script>
+const TODAY=new Date('2026-11-15');
+const pct=(a,b)=>((a/b-1)*100);
+const f=n=>n.toLocaleString('en-IN');
+// ---- REAL DATA (from supplied filings / Screener export). Units: ₹ crore ----
+const RES={
+ TITAN:{name:'Titan',q:'Q2 FY27',cur:'Sep 26',m:[
+  ['Revenue',20614,21356,18725],['EBITDA',3799,3038,1988],['PBT',3000,2429,1522],['PAT',2393,1777,1120]],
+  src:'Consolidated results filing, 5 Nov 2026. Revenue = sale of products + other operating revenue. EBITDA = PBT + finance cost + depreciation.',
+  note:'Headline PBT includes a ₹671 cr non-cash Ind-AS credit (put-option fair value). Without it PBT is ₹2,329 cr, up 53% YoY, and about ₹536 cr of that is gold custom-duty gain (per company release).'},
+ INFY:{name:'Infosys',q:'Q2 FY27',cur:'Sep 26',m:[
+  ['Revenue',49244,48211,44490],['EBITDA',11689,11409,10535],['PBT',11063,11028,10229],['PAT',7823,7769,7364]],
+  src:'Screener Excel export (quarterly P&L). EBITDA = operating profit before depreciation. Rupee growth; guidance is in constant currency.',
+  note:'Margin after depreciation is 21.0%, inside the 20–22% guidance. Rupee revenue grew 10.7% YoY but constant-currency growth was only 1.5%: most of the rest is the weaker rupee.'}};
+const ITEMS=[
+ {d:'2026-11-12',t:'TITAN',cat:'fund_raise',p:3,h:'Repaid ₹1,000 cr commercial paper issued 14 Aug 2026',why:'Routine debt rollover, no new information.'},
+ {d:'2026-11-12',t:'TITAN',cat:'investor_meetings',p:3,h:'Intimation of analyst / investor meet',why:'Scheduling notice only.'},
+ {d:'2026-11-11',t:'TITAN',cat:'earnings_call',p:2,h:'Q2 FY27 earnings call transcript filed',why:'Management commentary on jewellery demand and the gold-price effect.'},
+ {d:'2026-11-05',t:'TITAN',cat:'results',p:1,h:'Q2 FY27 results: PAT ₹2,393 cr, +114% YoY',why:'<b>Read the quality, not the headline:</b> ₹671 cr of PBT is a non-cash credit.',res:'TITAN'},
+ {d:'2026-10-28',t:'INFY',cat:'earnings_call',p:2,h:'Q2 FY27 press conference and earnings call transcripts filed',why:'Source for the guidance cut below.'},
+ {d:'2026-10-23',t:'INFY',cat:'results',p:1,h:'Q2 FY27 results: FY27 revenue guidance cut to 1–2% (from 1.5–3%)',why:'<b>Second cut this year.</b> Margin guidance held at 20–22%. Large deals $5.2 bn; AI revenue 10.5% of sales.',res:'INFY'}];
+const CATS=['results','M&A','management_change','fund_raise','earnings_call','investor_meetings'];
+const PCOL={1:'Matters now',2:'Worth a look',3:'Routine'};
+let S={tab:'brief',win:30,cats:Object.fromEntries(CATS.map(c=>[c,true])),vol:2,px:5,open3:false};
+// ---- Scorecard: management promises vs delivery (primary sources only) ----
+const CL=[
+ {k:'FY26 revenue growth',p:'Started 0–3%, raised to 3–3.5% (constant currency)',r:'Delivered 3.1%, inside the raised band',v:'ok',s:'Q3 FY26 call p.4; Q4 FY26 call p.4',tag:'revenue growth guidance FY26'},
+ {k:'FY26 operating margin',p:'20–22%',r:'Stable at 21%',v:'ok',s:'Q4 FY26 call p.4',tag:'margin guidance FY26'},
+ {k:'20,000 freshers in FY26',p:'About 18,000 onboarded by January, on track for 20,000',r:'More than 20,000 onboarded',v:'ok',s:'Q3 FY26 call p.5; Q4 FY26 call p.8',tag:'hiring freshers'},
+ {k:'Optimum / Stratus deals close',p:'Optimum “a week, a month, two months” (April)',r:'Closed by the July call',v:'ok',s:'Q4 FY26 media call; Q1 FY27 call p.33',tag:'acquisitions optimum stratus versent'},
+ {k:'FY27 margin',p:'20–22%, held in all three updates',r:'Q1 21.1%, Q2 21%',v:'ok',s:'Q1 FY27 call p.6; Q2 FY27 call p.4',tag:'margin guidance FY27'},
+ {k:'FY27 revenue growth',p:'1.5–3.5% (Apr) then 1.5–3% (Jul) then 1–2% (Oct)',r:'Cut twice. Q1 grew 2.4%, Q2 1.5% YoY',v:'no',s:'Q4 FY26 call p.4; Q1 FY27 call p.6; Q2 FY27 call p.4',tag:'revenue growth guidance FY27 cut'},
+ {k:'AI revenue disclosure',p:'5.5% of sales in Q3 FY26; April call declined to give a number',r:'Resumed: 8.2% (Q1), 10.5% (Q2)',v:'inf',s:'Q4 FY26 media call; Q1 FY27 call p.5; Q2 FY27 call p.4',tag:'ai revenue'}];
+// ---- Ask: retrieval over the claims above, no outside knowledge ----
+const KB=CL.map(c=>({text:c.k+'. Promise: '+c.p+'. Outcome: '+c.r+'.',src:c.s,tag:(c.k+' '+c.tag).toLowerCase()}));
+KB.push({text:'Titan Q2 FY27: PAT ₹2,393 cr (+114% YoY). ₹671 cr of PBT is a non-cash Ind-AS credit; excluding it PBT is ₹2,329 cr, +53% YoY.',src:'Titan results filing, 5 Nov 2026',tag:'titan results pat pbt quality jewellery'});
+function ask(q){const w=q.toLowerCase().split(/\W+/).filter(x=>x.length>2);
+ const sc=KB.map(k=>({k,s:w.filter(x=>k.tag.includes(x)||k.text.toLowerCase().includes(x)).length})).filter(x=>x.s).sort((a,b)=>b.s-a.s).slice(0,2);
+ return sc.length?sc.map(x=>x.k.text+'<div class="src">Source: '+x.k.src+'</div>').join('<hr>'):'Not found in the loaded documents (annual report, concall transcripts, results filings). I don’t answer from outside knowledge.';}
+// ---- UI ----
+const $=s=>document.querySelector(s);
+function resTable(r){const R=RES[r];return `<table><tr><th>₹ crore, ${R.q}</th><th>QoQ</th><th>YoY</th></tr>`+R.m.map(([n,c,q,y])=>{const a=pct(c,q),b=pct(c,y),cl=x=>x>=0?'up':'dn',sg=x=>(x>=0?'+':'')+x.toFixed(1)+'%';return `<tr><td>${n} <span class="why">${f(c)}</span></td><td class="${cl(a)}">${sg(a)}</td><td class="${cl(b)}">${sg(b)}</td></tr>`}).join('')+`</table><div class="note">${R.note}</div><div class="src">${R.src}</div>`}
+function card(i,idx){const days=(TODAY-new Date(i.d))/864e5;
+ return `<div class="card ${i.p==1?'p1':''}"><div class="top"><span><span class="tk">${i.t}</span><span class="chip">${i.cat}</span></span><span>${new Date(i.d).toLocaleDateString('en-GB',{day:'numeric',month:'short'})}</span></div><div class="ttl">${i.h}</div><div class="why">${i.why}</div>${i.res?resTable(i.res):''}<div class="btns"><button class="btn main" onclick="interrogate(${idx})">Interrogate</button><button class="btn" onclick="mute('${i.t}')">Mute ${i.t}</button></div></div>`}
+let muted=[];function mute(t){muted.push(t);render()}
+function brief(){const items=ITEMS.map((x,i)=>({...x,i})).filter(x=>(TODAY-new Date(x.d))/864e5<=S.win&&!muted.includes(x.t)&&S.cats[x.cat]!==false).sort((a,b)=>a.p-b.p||new Date(b.d)-new Date(a.d));
+ const m=items.filter(x=>x.p<3),r=items.filter(x=>x.p==3);
+ $('#asof').textContent=`${m.length} ${m.length==1?'item matters':'items matter'} · ${r.length} routine hidden · as of 15 Nov 2026`;
+ return (m.map(x=>card(x,x.i)).join('')||'<div class="coll">Nothing material in this window.</div>')+(r.length?`<div class="coll" onclick="S.open3=!S.open3;render()">${S.open3?'Hide':'Show'} ${r.length} routine filings</div>`+(S.open3?r.map(x=>card(x,x.i)).join(''):''):'')}
+function trust(){const ok=CL.filter(c=>c.v=='ok').length,n=CL.filter(c=>c.v!='inf').length;
+ return `<div class="card"><div class="ttl">Infosys: can you trust the guidance?</div><div class="why"><b>${ok} of ${n}</b> checkable promises kept. The one miss is the one that matters most: FY27 revenue guidance, cut twice in six months.</div><div class="meter"><i style="width:${ok/n*100}%"></i></div><div class="src">Last 5 earnings calls plus the FY26 annual report. Primary sources only.</div></div>`+CL.map(c=>`<div class="card"><div class="top"><span class="tk">${c.k}</span><span class="verd v-${c.v}">${{ok:'DELIVERED',no:'MISSED',inf:'CONTEXT'}[c.v]}</span></div><div class="why" style="margin-top:6px"><b>Said:</b> ${c.p}</div><div class="why"><b>Result:</b> ${c.r}</div><div class="src">${c.s}</div></div>`).join('')}
+let chat=[];function askUI(){const co=[['Infosys','IT services','INFY'],['Titan','Consumer, jewellery','TITAN']];
+ return `<div class="card"><input type="text" id="q" placeholder="Search a company or sector, or ask a question" onkeydown="if(event.key=='Enter')go()"><div style="margin-top:8px">`+['Why was guidance cut?','Did they hit the margin guidance?','Titan PAT quality','AI revenue share'].map(x=>`<button class="pill q" onclick="go('${x}')">${x}</button>`).join('')+`</div></div>`+chat.map(m=>`<div class="msg ${m.me?'me':''}">${m.t}</div>`).join('')+`<div class="coll">Loaded: ${co.map(c=>c[0]+' ('+c[1]+')').join(' · ')}. Answers come only from filings and transcripts in the bundle.</div>`}
+function go(x){const q=x||$('#q').value.trim();if(!q)return;const l=q.toLowerCase();let a;
+ if(/^(infosys|infy)$/.test(l))a='Infosys: IT services. Covered: 5 earnings calls, FY26 annual report, 10 quarters of financials. See the Trust tab.';
+ else if(/^titan$/.test(l))a='Titan: consumer / jewellery. Covered: Q2 FY27 results filing and call transcript.';
+ else if(/it services|^it$|software/.test(l))a='Sector IT services: Infosys is loaded. Any other NSE ticker needs the fetch pipeline (next step, not wired in this build).';
+ else a=ask(q);chat.push({me:1,t:q},{t:a});render();window.scrollTo(0,document.body.scrollHeight)}
+function interrogate(i){const it=ITEMS[i];const qs=it.t=='INFY'?['Why was guidance cut?','Did they hit the margin guidance?','AI revenue share']:['Titan PAT quality'];
+ $('#sh').innerHTML=`<div class="ttl">${it.t}: ${it.h}</div><div class="why">Tap a question. Answers are drawn from the filings only.</div>`+qs.map(x=>`<div class="msg" onclick="this.querySelector('div').classList.toggle('hide')" style="cursor:pointer"><b>${x}</b><div class="hide" style="margin-top:6px">${ask(x)}</div></div>`).join('')+`<div class="btns"><button class="btn main" onclick="closeS()">Close</button><button class="btn" onclick="closeS();S.tab='ask';render()">Ask something else</button></div>`;$('#sheet').classList.add('show')}
+function closeS(){$('#sheet').classList.remove('show')}
+$('#bell').onclick=()=>{$('#sh').innerHTML=`<div class="ttl">Alert rules</div><div class="why">You decide what counts as unusual. Announcement categories filter the briefing now.</div>`+CATS.map(c=>`<label class="t"><span>${c}</span><input type="checkbox" ${S.cats[c]?'checked':''} onchange="S.cats['${c}']=this.checked;render()"></label>`).join('')+`<label class="t"><span>Volume above (× 20-day avg)</span><input type="number" value="${S.vol}" min="1" step="0.5" style="width:64px;min-height:36px" onchange="S.vol=this.value"></label><label class="t"><span>Price move beyond (±%)</span><input type="number" value="${S.px}" min="1" style="width:64px;min-height:36px" onchange="S.px=this.value"></label><div class="note">Price and volume thresholds are saved but this build has no end-of-day price feed connected, so they don’t fire yet.</div><div class="btns"><button class="btn main" onclick="closeS()">Done</button></div>`;$('#sheet').classList.add('show')};
+$('#sheet').onclick=e=>{if(e.target.id=='sheet')closeS()};
+function render(){$('#win').innerHTML=S.tab=='brief'?[[1,'24h'],[3,'3 days'],[7,'7 days'],[30,'30 days']].map(([d,l])=>`<button class="pill ${S.win==d?'on':''}" onclick="S.win=${d};render()">${l}</button>`).join(''):'';
+ if(S.tab!='brief')$('#asof').textContent=S.tab=='trust'?'Management promises vs delivery':'Ask FINN';
+ $('#main').innerHTML=S.tab=='brief'?brief():S.tab=='trust'?trust():askUI();
+ document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.t==S.tab))}
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{S.tab=b.dataset.t;render();window.scrollTo(0,0)});
+render();
+</script></body></html>
