@@ -3,7 +3,7 @@
 
 Mobile-first prototype for the ENAM AI Engineer build challenge.
 
-**Live demo:** [Open FINN Demo](https://samridhisharma03.github.io/ENAM-Submissions/**?utm_source=chatgpt.com)
+**Live demo:** [Open FINN Demo](http://stunning-khapse-2e144e.netlify.app)
 Open it on a phone. It is one static file (`index.html`), so there is nothing to install: double-click it to run locally.
 
 ## The idea
